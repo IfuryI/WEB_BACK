@@ -1,0 +1,443 @@
+definitions:
+  http.loginData:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  http.signupData:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  http.subsResponse:
+    properties:
+      current_page:
+        type: integer
+      max_items:
+        type: integer
+      pages_number:
+        type: integer
+      subs:
+        items:
+          $ref: '#/definitions/models.UserNoPassword'
+        type: array
+    type: object
+  models.Actor:
+    properties:
+      avatar:
+        type: string
+      biography:
+        type: string
+      birthdate:
+        type: string
+      id:
+        type: string
+      is_liked:
+        type: boolean
+      movies:
+        items:
+          $ref: '#/definitions/models.MovieReference'
+        type: array
+      movies_count:
+        type: integer
+      movies_rating:
+        type: integer
+      name:
+        type: string
+      origin:
+        type: string
+      profession:
+        type: string
+    type: object
+  models.ActorData:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Movie:
+    properties:
+      actors:
+        items:
+          $ref: '#/definitions/models.ActorData'
+        type: array
+      artist:
+        type: string
+      banner:
+        type: string
+      budget:
+        type: string
+      composer:
+        type: string
+      country:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      director:
+        type: string
+      duration:
+        type: string
+      genre:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      is_watched:
+        type: boolean
+      montage:
+        type: string
+      operator:
+        type: string
+      poster:
+        type: string
+      producer:
+        type: string
+      production_year:
+        type: integer
+      rating:
+        type: number
+      rating_count:
+        type: integer
+      scriptwriter:
+        type: string
+      slogan:
+        type: string
+      title:
+        type: string
+      trailer_preview:
+        type: string
+    type: object
+  models.MovieReference:
+    properties:
+      id:
+        type: string
+      rating:
+        type: number
+      title:
+        type: string
+    type: object
+  models.User:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      favorite_actors:
+        items:
+          $ref: '#/definitions/models.Actor'
+        type: array
+      movies_watched:
+        type: integer
+      password:
+        type: string
+      reviews_number:
+        type: integer
+      subscribers:
+        type: integer
+      subscriptions:
+        type: integer
+      username:
+        type: string
+    type: object
+  models.UserNoPassword:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      favorite_actors:
+        items:
+          $ref: '#/definitions/models.Actor'
+        type: array
+      movies_watched:
+        type: integer
+      reviews_number:
+        type: integer
+      subscribers:
+        type: integer
+      subscriptions:
+        type: integer
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /genres:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "500":
+          description: Ошибка получения
+      security:
+      - UserKeyAuth: []
+      summary: '"получение списка всех жанров"'
+  /movies:
+    get:
+      parameters:
+      - description: category
+        in: path
+        name: category
+        required: true
+        type: integer
+      - description: genre
+        in: path
+        name: category
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "500":
+          description: Ошибка получения фильмов
+      security:
+      - UserKeyAuth: []
+      summary: '"получение фильмов"'
+  /movies/{id}:
+    get:
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Movie'
+        "404":
+          description: Фильм не найден
+      security:
+      - UserKeyAuth: []
+      summary: '"получение информации о фильме по Id"'
+  /movies/{id}/similar:
+    get:
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Movie'
+            type: array
+        "500":
+          description: Ошибка получения
+      security:
+      - UserKeyAuth: []
+      summary: '"получение списка похожих фильмов"'
+  /movies/{id}/watch:
+    delete:
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка удаления статуса
+      security:
+      - UserKeyAuth: []
+      summary: '"Удаление у юзера статус просмотренно для фильма"'
+    post:
+      parameters:
+      - description: Movie ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка простановки статуса
+      security:
+      - UserKeyAuth: []
+      summary: '"Установка у юзера статус просмотренно для фильма"'
+  /subscriptions/:username:
+    delete:
+      parameters:
+      - description: username пользователя
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка отписки
+      security:
+      - UserKeyAuth: []
+      summary: '"Отписка от пользователя"'
+    post:
+      parameters:
+      - description: username пользователя
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка подписки
+      security:
+      - UserKeyAuth: []
+      summary: '"Подписка на другого пользователя"'
+  /user/:username:
+    get:
+      parameters:
+      - description: username пользователя
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка получения
+      security:
+      - UserKeyAuth: []
+      summary: '"Получение пользователя"'
+  /users:
+    get:
+      parameters:
+      - description: user_id пользователя
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка разлогина
+      security:
+      - UserKeyAuth: []
+      summary: '"Получение текущего пользователя"'
+    post:
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: signapData
+        required: true
+        schema:
+          $ref: '#/definitions/http.signupData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.subsResponse'
+        "400":
+          description: Ошибка введеных данных
+        "500":
+          description: Ошибка создания
+      security:
+      - UserKeyAuth: []
+      summary: '"Создание пользователя"'
+    put:
+      parameters:
+      - description: Инфа пользователя
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка обновления
+      security:
+      - UserKeyAuth: []
+      summary: '"Обновление инфо о пользователе"'
+  /users/admin/:username:
+    delete:
+      parameters:
+      - description: session_id пользователя
+        in: path
+        name: session_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка разлогина
+      security:
+      - UserKeyAuth: []
+      summary: '"Разлогин пользователя"'
+    post:
+      parameters:
+      - description: Данные пользователя для логина
+        in: body
+        name: loginData
+        required: true
+        schema:
+          $ref: '#/definitions/http.loginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Все ок
+        "500":
+          description: Ошибка логина
+      security:
+      - UserKeyAuth: []
+      summary: '"Логин пользователя"'
+swagger: "2.0"

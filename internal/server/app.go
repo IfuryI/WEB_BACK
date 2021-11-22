@@ -9,8 +9,6 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"github.com/IfuryI/WEB_BACK/internal/actors"
 	actorsHttp "github.com/IfuryI/WEB_BACK/internal/actors/delivery/http"
 	actorsDBStorage "github.com/IfuryI/WEB_BACK/internal/actors/repository/dbstorage"
@@ -43,10 +41,17 @@ import (
 	usersDBStorage "github.com/IfuryI/WEB_BACK/internal/users/repository/dbstorage"
 	usersUseCase "github.com/IfuryI/WEB_BACK/internal/users/usecase"
 	constants "github.com/IfuryI/WEB_BACK/pkg/const"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
+
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+
+	_ "github.com/IfuryI/WEB_BACK/docs"
 )
 
 // App структура главного приложения
@@ -72,6 +77,23 @@ func init() {
 		log.Print("No .env file found")
 	}
 }
+
+// @title Blueprint Swagger API
+// @version 1.0
+// @description Swagger API for Golang Project Blueprint.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.email martin7.heinz@gmail.com
+
+// @license.name MIT
+// @license.url https://github.com/MartinHeinz/go-project-blueprint/blob/master/LICENSE
+
+// @BasePath /api/v1
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 // NewApp инициализация приложения
 func NewApp() *App {
@@ -162,6 +184,8 @@ func (app *App) Run(port string) error {
 
 	api := router.Group("/api")
 	v1 := api.Group("/v1")
+
+	v1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	usersHttp.RegisterHTTPEndpoints(v1, app.usersUC, app.sessionsDL, app.authMiddleware, app.fileServer, app.logger)
 	moviesHttp.RegisterHTTPEndpoints(v1, app.moviesUC, app.authMiddleware, app.logger)

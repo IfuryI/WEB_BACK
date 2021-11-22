@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gin-gonic/gin"
 	"github.com/IfuryI/WEB_BACK/internal/logger"
 	"github.com/IfuryI/WEB_BACK/internal/models"
 	"github.com/IfuryI/WEB_BACK/internal/movies"
 	constants "github.com/IfuryI/WEB_BACK/pkg/const"
+	"github.com/gin-gonic/gin"
 )
 
 // Handler структура хендлера
@@ -34,6 +34,7 @@ func NewHandler(useCase movies.UseCase, Log *logger.Logger) *Handler {
 	}
 }
 
+
 // CreateMovie создание фильма
 func (h *Handler) CreateMovie(ctx *gin.Context) {
 	movieData := new(models.Movie)
@@ -54,6 +55,14 @@ func (h *Handler) CreateMovie(ctx *gin.Context) {
 	ctx.Status(http.StatusCreated)
 }
 
+// GetMovie godoc
+// @Summary "получение информации о фильме по Id"
+// @Produce json
+// @Param id path integer true "Movie ID"
+// @Success 200 {object} models.Movie
+// @Failure 404 "Фильм не найден"
+// @Router /movies/{id} [get]
+// @Security UserKeyAuth
 // GetMovie получение информации о фильме
 func (h *Handler) GetMovie(ctx *gin.Context) {
 	auth, ok := ctx.Get(constants.AuthStatusKey)
@@ -77,6 +86,15 @@ func (h *Handler) GetMovie(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, movie)
 }
 
+// GetMovies godoc
+// @Summary "получение фильмов"
+// @Produce json
+// @Param category path integer true "category"
+// @Param category path integer true "genre"
+// @Success 200 {object} []models.Movie
+// @Failure 500 "Ошибка получения фильмов"
+// @Router /movies [get]
+// @Security UserKeyAuth
 // GetMovies получить фильмы
 func (h *Handler) GetMovies(ctx *gin.Context) {
 	category := ctx.Query("category")
@@ -125,6 +143,13 @@ func (h *Handler) GetBestMovies(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, moviesResponse)
 }
 
+// GetGenres godoc
+// @Summary "получение списка всех жанров"
+// @Produce json
+// @Success 200 {object} []string
+// @Failure 500 "Ошибка получения"
+// @Router /genres [get]
+// @Security UserKeyAuth
 // GetGenres получить доступные жанры
 func (h *Handler) GetGenres(ctx *gin.Context) {
 	genres, err := h.useCase.GetAllGenres()
@@ -180,6 +205,14 @@ func (h *Handler) GetMoviesByGenres(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, moviesResponse)
 }
 
+// MarkWatched godoc
+// @Summary "Установка у юзера статус просмотренно для фильма"
+// @Produce json
+// @Param id path integer true "Movie ID"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка простановки статуса"
+// @Router /movies/{id}/watch [post]
+// @Security UserKeyAuth
 // MarkWatched отметить просмотренным
 func (h *Handler) MarkWatched(ctx *gin.Context) {
 	user, ok := ctx.Get(constants.UserKey)
@@ -215,6 +248,14 @@ func (h *Handler) MarkWatched(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// MarkUnwatched godoc
+// @Summary "Удаление у юзера статус просмотренно для фильма"
+// @Produce json
+// @Param id path integer true "Movie ID"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка удаления статуса"
+// @Router /movies/{id}/watch [delete]
+// @Security UserKeyAuth
 // MarkUnwatched отметить непросмотренным
 func (h *Handler) MarkUnwatched(ctx *gin.Context) {
 	user, ok := ctx.Get(constants.UserKey)
@@ -250,6 +291,14 @@ func (h *Handler) MarkUnwatched(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// GetSimilar godoc
+// @Summary "получение списка похожих фильмов"
+// @Produce json
+// @Param id path integer true "Movie ID"
+// @Success 200 {object} []models.Movie
+// @Failure 500 "Ошибка получения"
+// @Router /movies/{id}/similar [get]
+// @Security UserKeyAuth
 // GetSimilar получить похожие
 func (h *Handler) GetSimilar(ctx *gin.Context) {
 	similarMovies, err := h.useCase.GetSimilar(ctx.Param("id"))

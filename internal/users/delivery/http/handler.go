@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/IfuryI/WEB_BACK/internal/csrf"
 	"github.com/IfuryI/WEB_BACK/internal/logger"
 	"github.com/IfuryI/WEB_BACK/internal/models"
@@ -16,6 +15,7 @@ import (
 	"github.com/IfuryI/WEB_BACK/internal/services/sessions"
 	"github.com/IfuryI/WEB_BACK/internal/users"
 	constants "github.com/IfuryI/WEB_BACK/pkg/const"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/metadata"
 )
@@ -51,6 +51,15 @@ type subsResponse struct {
 	Subs        []models.UserNoPassword `json:"subs"`
 }
 
+// CreateUser godoc
+// @Summary "Создание пользователя"
+// @Produce json
+// @Param signapData body signupData true "Данные пользователя"
+// @Success 200 {object} http.subsResponse
+// @Failure 400 "Ошибка введеных данных"
+// @Failure 500 "Ошибка создания"
+// @Router /users [post]
+// @Security UserKeyAuth
 // CreateUser создание юзера
 func (h *Handler) CreateUser(ctx *gin.Context) {
 	signupData := new(signupData)
@@ -110,6 +119,14 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 	ctx.Status(http.StatusCreated) // 201
 }
 
+// Logout godoc
+// @Summary "Разлогин пользователя"
+// @Produce json
+// @Param session_id path integer true "session_id пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка разлогина"
+// @Router /users/admin/:username [delete]
+// @Security UserKeyAuth
 // Logout разлогин юзера
 func (h *Handler) Logout(ctx *gin.Context) {
 	cookie, err := ctx.Cookie("session_id")
@@ -136,6 +153,14 @@ type loginData struct {
 	Password string `json:"password"`
 }
 
+// Login godoc
+// @Summary "Логин пользователя"
+// @Produce json
+// @Param loginData body loginData true "Данные пользователя для логина"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка логина"
+// @Router /users/admin/:username [post]
+// @Security UserKeyAuth
 // Login логин юзера
 func (h *Handler) Login(ctx *gin.Context) {
 	loginData := new(loginData)
@@ -177,6 +202,14 @@ func (h *Handler) Login(ctx *gin.Context) {
 	ctx.Status(http.StatusOK) // 200
 }
 
+// GetCurrentUser godoc
+// @Summary "Получение текущего пользователя"
+// @Produce json
+// @Param userId path integer true "user_id пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка разлогина"
+// @Router /users [get]
+// @Security UserKeyAuth
 // GetCurrentUser получить текущего юзера
 func (h *Handler) GetCurrentUser(ctx *gin.Context) {
 	user, ok := ctx.Get(constants.UserKey)
@@ -199,6 +232,14 @@ func (h *Handler) GetCurrentUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, userNoPassword)
 }
 
+// GetUser godoc
+// @Summary "Получение пользователя"
+// @Produce json
+// @Param username path string true "username пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка получения"
+// @Router /user/:username [get]
+// @Security UserKeyAuth
 // GetUser получить юзера
 func (h *Handler) GetUser(ctx *gin.Context) {
 	userModel, err := h.useCase.GetUser(ctx.Param("username"))
@@ -212,6 +253,14 @@ func (h *Handler) GetUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, userNoPassword)
 }
 
+// UpdateUser godoc
+// @Summary "Обновление инфо о пользователе"
+// @Produce json
+// @Param info body models.User true "Инфа пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка обновления"
+// @Router /users [put]
+// @Security UserKeyAuth
 // UpdateUser обновить юзера
 func (h *Handler) UpdateUser(ctx *gin.Context) {
 	changed := new(models.User)
@@ -350,6 +399,14 @@ func (h *Handler) UploadAvatar(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, userNoPassword)
 }
 
+// Subscribe godoc
+// @Summary "Подписка на другого пользователя"
+// @Produce json
+// @Param username path string true "username пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка подписки"
+// @Router /subscriptions/:username [post]
+// @Security UserKeyAuth
 // Subscribe подписаться на юзера
 func (h *Handler) Subscribe(ctx *gin.Context) {
 	user, ok := ctx.Get(constants.UserKey)
@@ -386,6 +443,14 @@ func (h *Handler) Subscribe(ctx *gin.Context) {
 	ctx.Status(http.StatusOK) // 200
 }
 
+// Unsubscribe godoc
+// @Summary "Отписка от пользователя"
+// @Produce json
+// @Param username path string true "username пользователя"
+// @Success 200 "Все ок"
+// @Failure 500 "Ошибка отписки"
+// @Router /subscriptions/:username [delete]
+// @Security UserKeyAuth
 // Unsubscribe отписаться от юзера
 func (h *Handler) Unsubscribe(ctx *gin.Context) {
 	user, ok := ctx.Get(constants.UserKey)
