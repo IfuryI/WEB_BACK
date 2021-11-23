@@ -15,19 +15,6 @@ definitions:
       username:
         type: string
     type: object
-  http.subsResponse:
-    properties:
-      current_page:
-        type: integer
-      max_items:
-        type: integer
-      pages_number:
-        type: integer
-      subs:
-        items:
-          $ref: '#/definitions/models.UserNoPassword'
-        type: array
-    type: object
   models.Actor:
     properties:
       avatar:
@@ -140,27 +127,6 @@ definitions:
         type: integer
       password:
         type: string
-      reviews_number:
-        type: integer
-      subscribers:
-        type: integer
-      subscriptions:
-        type: integer
-      username:
-        type: string
-    type: object
-  models.UserNoPassword:
-    properties:
-      avatar:
-        type: string
-      email:
-        type: string
-      favorite_actors:
-        items:
-          $ref: '#/definitions/models.Actor'
-        type: array
-      movies_watched:
-        type: integer
       reviews_number:
         type: integer
       subscribers:
@@ -375,10 +341,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/http.subsResponse'
+        "201":
+          description: Все создалось
         "400":
           description: Ошибка введеных данных
         "500":

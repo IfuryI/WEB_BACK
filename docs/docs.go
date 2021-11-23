@@ -389,11 +389,8 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/http.subsResponse"
-                        }
+                    "201": {
+                        "description": "Все создалось"
                     },
                     "400": {
                         "description": "Ошибка введеных данных"
@@ -488,26 +485,6 @@ var doc = `{
                 },
                 "username": {
                     "type": "string"
-                }
-            }
-        },
-        "http.subsResponse": {
-            "type": "object",
-            "properties": {
-                "current_page": {
-                    "type": "integer"
-                },
-                "max_items": {
-                    "type": "integer"
-                },
-                "pages_number": {
-                    "type": "integer"
-                },
-                "subs": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.UserNoPassword"
-                    }
                 }
             }
         },
@@ -680,38 +657,6 @@ var doc = `{
                 },
                 "password": {
                     "type": "string"
-                },
-                "reviews_number": {
-                    "type": "integer"
-                },
-                "subscribers": {
-                    "type": "integer"
-                },
-                "subscriptions": {
-                    "type": "integer"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.UserNoPassword": {
-            "type": "object",
-            "properties": {
-                "avatar": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "favorite_actors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Actor"
-                    }
-                },
-                "movies_watched": {
-                    "type": "integer"
                 },
                 "reviews_number": {
                     "type": "integer"

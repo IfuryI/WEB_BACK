@@ -55,7 +55,7 @@ type subsResponse struct {
 // @Summary "Создание пользователя"
 // @Produce json
 // @Param signapData body signupData true "Данные пользователя"
-// @Success 200 {object} http.subsResponse
+// @Success 201 "Все создалось"
 // @Failure 400 "Ошибка введеных данных"
 // @Failure 500 "Ошибка создания"
 // @Router /users [post]
