@@ -1,22 +1,9 @@
-# КиноПоиск
-### Команда
-* [Теняев Олег](https://github.com/grillow)
-* [Афимин Илья](https://github.com/IfuryI)
-* [Бахметьев Глеб](https://github.com/polyanimal)
-* [Зотов Алексей](https://github.com/let-robots-reign)
-
-### Менторы
-* [Климова Наталия](https://github.com/Tataklim) - ментор по фронтенду
-* [Рыбаков Дмитрий](https://github.com/bulletmys) - ментор по бекенду
-
-### Swagger
-https://app.swaggerhub.com/apis/let-robots-reign/Kinopoisk/1.0.0
-
-### Деплой
-http://89.208.198.186:4000/
-
-### Ссылка на репозиторий фронтенда
-https://github.com/frontend-park-mail-ru/2021_1_kekEnd
+# WEB_FRONT
+## Цель работы. Предоставляемая возможность. Краткий перечень функциональных требований.
+  Разработать веб-сервис с информацией о кино (общая информация, постер, трейлер) с возможностью написания рецензий к фильмам, созданием собственных подборок фильмов, подпиской на других пользователей (для просмотра их действий на сайте)
+## Use-case-диаграмма и ER-диаграмма
+![Use-case](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-UseCase.drawio.png)
+![ER-диаграмма](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-ER.drawio.png)
 
 ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26
 This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
