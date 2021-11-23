@@ -5,7 +5,10 @@
 ![Use-case](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-UseCase.drawio.png)
 ![ER-диаграмма](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-ER.drawio.png)
 
-``` ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26
+```
+С балансировкой
+
+ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26
 This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
