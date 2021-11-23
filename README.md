@@ -5,7 +5,7 @@
 ![Use-case](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-UseCase.drawio.png)
 ![ER-диаграмма](https://github.com/IfuryI/WEB_FRONT/blob/main/LR1-ER.drawio.png)
 
-ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26
+``` ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26
 This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -61,14 +61,14 @@ Percentage of the requests served within a certain time (ms)
 95%    117
 98%    133
 99%    145
-100%    354 (longest request)
+100%    354 (longest request)```
 
 
 
-asdad
+Без балансировки
 
 
-ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26     
+``` ieafimin@MSK-C02D5445MD6R WEB_BACK % ab -c 10 -n 6000 -r https://cinemedia.ru/api/v1/movies/26     
 This is ApacheBench, Version 2.3 <$Revision: 1843412 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
@@ -124,4 +124,4 @@ Percentage of the requests served within a certain time (ms)
 95%    118
 98%    134
 99%    153
-100%    439 (longest request)
+100%    439 (longest request)``` 
